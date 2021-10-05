@@ -2,12 +2,16 @@
 
 `goa` helps visualise the execution of some global optimisation algorithms on a given problem.
 
-It has been developed to fulfill the assignment of Optimization Methods, a computer engineering course taught at the University of Florence.
+<img src="docs/media/01-DE.gif" width="256"/><img src="docs/media/02-DE.gif" width="256"/>  
+<img src="docs/media/01-MDE.gif" width="256"/><img src="docs/media/02-MDE.gif" width="256"/>
+
+`goa` has been developed to fulfill the assignment of Optimization Methods, a computer engineering course taught at the University of Florence.
 
 As of now, `goa` provides implementations of the following algorithms:
  - Memetic Differential Evolution (MDE)
  - Differential Evolution (DE)
  - Coordinate Method with Simple Descent Direction (CM)
+
 
 ## Installation
 To install `goa`, run this command in your terminal:
@@ -31,12 +35,9 @@ problem = problem.Ackley(bounds=(-2.5, 2.5))
 algorithms.memetic_differential_evolution(
   problem=problem,
   local_search_algorithm=algorithms.coordinate_method,
-  animation_filepath='mde-animation.gif'
+  animation_filepath='MDE-animation.gif'
 )
 ```
-<img src="docs/media/01-DE.gif" width="256"/><img src="docs/media/02-DE.gif" width="256"/>  
-<img src="docs/media/01-MDE.gif" width="256"/><img src="docs/media/02-MDE.gif" width="256"/>
-
 ## Dependencies
  - python = ">=3.8,<3.11"
  - matplotlib = "^3.4.3"
