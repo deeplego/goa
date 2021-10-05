@@ -44,15 +44,11 @@ algorithms.memetic_differential_evolution(
  - imageio = "^2.9.0"
  - imageio-ffmpeg = "^0.4.5"
 
-
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Credits
 The implementation of this package has had self-educational purpose and it has borrowed heavily from [yabox](https://github.com/pablormier/yabox).
-
-The structure of this package has been partially created with (Cookiecutter)[Cookiecutter: https://github.com/audreyr/cookiecutter] and the (`audreyr/cookiecutter-pypackage`)[https://github.com/audreyr/cookiecutter-pypackage] project template.
 
 ## References
 1. [Memetic differential evolution methods for clustering problems (Pierluigi Mansueto, Fabio Schoen)](https://www.sciencedirect.com/science/article/pii/S0031320321000364)
