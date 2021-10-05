@@ -34,7 +34,7 @@ algorithms.memetic_differential_evolution(
   animation_filepath='mde-animation.gif'
 )
 ```
-<img src="docs/media/01-DE.gif" width="256"/><img src="docs/media/02-DE.gif" width="256"/>
+<img src="docs/media/01-DE.gif" width="256"/><img src="docs/media/02-DE.gif" width="256"/>  
 <img src="docs/media/01-MDE.gif" width="256"/><img src="docs/media/02-MDE.gif" width="256"/>
 
 ## Dependencies
