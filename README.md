@@ -26,7 +26,7 @@ A command-line interface is available for quick (though limited) usage, just run
 ```bash
 $ python ./src/goa/cli.py
 ```
-For full-fledged usage, the following is an application of (MDE)[] algorithm to the (Ackley)[https://en.wikipedia.org/wiki/Ackley_function] function that provide also a .gif of the algorithm exectution:
+For full-fledged usage, the following is an application of the Memetic Differential Evolution algorithm to the [Ackley](https://en.wikipedia.org/wiki/Ackley_function) function that provide also a .gif of the algorithm exectution:
 
 ```python
 from gop import problems, algorithms
