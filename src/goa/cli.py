@@ -15,7 +15,7 @@ An animation will be saved at the provided filepath location, if provided.\n
 It should end with .gif extension.
 """
 
-def float_tuple_type(text):
+def handle_tuple_type(text):
     text = str(text)
     text = text.replace('(', '').replace(')', '')
     (x, y) = list(map(float, text.split(',')))
@@ -33,7 +33,7 @@ def float_tuple_type(text):
     "--problem-bounds",
     prompt="[OPTIONAL] Change the problem bounds",
     default="(-2.5, 2.5)",
-    type=float_tuple_type,
+    type=handle_tuple_type,
     help='Bounds for the given problem.',
 )
 @click.option(

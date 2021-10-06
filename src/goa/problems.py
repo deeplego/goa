@@ -1,18 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from abc import ABC, abstractmethod
 
-class BaseProblem:
-    def __init__(self, dim=1, bounds=(-1, 1), name=None):
+
+class BaseProblem(ABC):
+    def __init__(self, dim=2, bounds=(-1, 1), name=None):
         self.bounds = [bounds] * dim
         self.dim = dim
         self.name = name or self.__class__.__name__
 
-    def __call__(self, *args, **kwargs):
-        return self.evaluate(*args, **kwargs)
-
-    def evaluate(self, x):
-        raise NotImplementedError("Implement the evaluation function.")
+    @abstractmethod
+    def __call__(self):
+        pass
 
     def plot(
         self,
@@ -81,7 +81,7 @@ class Ackley(BaseProblem):
         self.b = b
         self.c = c
 
-    def evaluate(self, x):
+    def __call__(self, x):
         assert len(x) == self.dim
         s1 = np.sum(np.power(x, 2), axis=-1)
         s2 = np.sum(np.cos(self.c * x), axis=-1)
@@ -98,7 +98,7 @@ class Rastrigin(BaseProblem):
         super().__init__(dim, bounds)
         self.a = a
 
-    def evaluate(self, x):
+    def __call__(self, x):
         return self.a * self.dim + np.sum(
             np.power(x, 2) - self.a * np.cos(2 * np.pi * x), axis=-1
         )
@@ -111,7 +111,7 @@ class Quadratic(BaseProblem):
         self.b = np.asarray(b)
         self.c = c
 
-    def evaluate(self, x):
+    def __call__(self, x):
         assert len(x) == self.dim
         x = np.asarray(x)
         return 1/2 * np.dot(
