@@ -2,8 +2,9 @@
 
 `goa` helps visualise the execution of some global optimisation algorithms on a given problem.
 
-<img src="docs/media/01-DE.gif" width="256"/><img src="docs/media/02-DE.gif" width="256"/>  
-<img src="docs/media/01-MDE.gif" width="256"/><img src="docs/media/02-MDE.gif" width="256"/>
+<img src="docs/media/01-DE.gif" width="350"/><img src="docs/media/02-DE.gif" width="350"/>
+
+<img src="docs/media/01-MDE.gif" width="350"/><img src="docs/media/02-MDE.gif" width="350"/>
 
 `goa` has been developed to fulfill the assignment of Optimization Methods, a computer engineering course taught at the University of Florence.
 
@@ -29,7 +30,7 @@ $ python ./src/goa/cli.py
 For full-fledged usage, the following is an application of the Memetic Differential Evolution algorithm to the [Ackley](https://en.wikipedia.org/wiki/Ackley_function) function that provide also a .gif of the algorithm exectution:
 
 ```python
-from gop import problems, algorithms
+from goa import problems, algorithms
 
 problem = problem.Ackley(bounds=(-2.5, 2.5))
 algorithms.memetic_differential_evolution(
