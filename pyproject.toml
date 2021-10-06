@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goa"
-version = "0.1.0"
+version = "0.1.1"
 description = "goa (Global Optimization Animations) helps visualize the execution of some global optimization algorithms on a given problem."
 authors = ["Lorenzo Palloni"]
 license = "MIT"
