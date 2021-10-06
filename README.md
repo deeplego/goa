@@ -25,7 +25,7 @@ $ pip install goa
 
 A command-line interface is available for quick (though limited) usage, just run this in your terminal:
 ```bash
-$ python ./src/goa/cli.py
+$ python -m goa
 ```
 For full-fledged usage, the following is an application of the Memetic Differential Evolution algorithm to the [Ackley](https://en.wikipedia.org/wiki/Ackley_function) function that provide also a .gif of the algorithm exectution:
 
