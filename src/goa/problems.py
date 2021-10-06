@@ -2,31 +2,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from abc import ABC, abstractmethod
+from typing import Tuple, TypeVar
+
+T = TypeVar("T")
 
 
 class BaseProblem(ABC):
-    def __init__(self, dim=2, bounds=(-1, 1), name=None):
+    def __init__(
+        self, dim: int = 2, bounds: Tuple[float, float] = (-1, 1), name: str = None
+    ):
         self.bounds = [bounds] * dim
         self.dim = dim
         self.name = name or self.__class__.__name__
 
     @abstractmethod
-    def __call__(self):
+    def __call__(self, x: T) -> T:
         pass
 
     def plot(
         self,
-        ax=None,
-        fig=None,
+        ax: plt.Axes = None,
+        fig: plt.Figure = None,
         figsize=(12, 8),
-        num_points=100,
-        background_color=(1.0, 1.0, 1.0, 0.0),  # white
-        levels=100,
-        cmap="Blues_r",
-        alpha=0.75,
-        offset=0.10,
-        view_init=None,
-    ):
+        num_points: int = 100,
+        background_color: Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        levels: int = 100,
+        cmap: str = "Blues_r",
+        alpha: float = 0.75,
+        offset: float = 0.10,
+        view_init: Tuple[float, float] = None,
+    ) -> Tuple[plt.Figure, plt.Axes]:
         xbounds, ybounds = self.bounds[0], self.bounds[1]
         x = np.linspace(min(xbounds), max(xbounds), num_points)
         y = np.linspace(min(ybounds), max(ybounds), num_points)
@@ -75,13 +80,20 @@ class BaseProblem(ABC):
 
 
 class Ackley(BaseProblem):
-    def __init__(self, dim=2, bounds=(-32.768, 32.768), a=20, b=0.2, c=2 * np.pi):
+    def __init__(
+        self,
+        dim: int = 2,
+        bounds: Tuple[float, float] = (-32.768, 32.768),
+        a: float = 20,
+        b: float = 0.2,
+        c: float = 2 * np.pi,
+    ):
         super().__init__(dim, bounds)
         self.a = a
         self.b = b
         self.c = c
 
-    def __call__(self, x):
+    def __call__(self, x: T) -> T:
         assert len(x) == self.dim
         s1 = np.sum(np.power(x, 2), axis=-1)
         s2 = np.sum(np.cos(self.c * x), axis=-1)
@@ -94,28 +106,37 @@ class Ackley(BaseProblem):
 
 
 class Rastrigin(BaseProblem):
-    def __init__(self, dim=2, bounds=(-5.12, 5.12), a=10):
+    def __init__(
+        self, dim: int = 2, bounds: Tuple[float, float] = (-5.12, 5.12), a: float = 10
+    ):
         super().__init__(dim, bounds)
         self.a = a
 
-    def __call__(self, x):
+    def __call__(self, x: T) -> T:
         return self.a * self.dim + np.sum(
             np.power(x, 2) - self.a * np.cos(2 * np.pi * x), axis=-1
         )
 
 
 class Quadratic(BaseProblem):
-    def __init__(self, dim=2, bounds=(-5, 5), Q=((1., 0.), (0., 1.)), b=(0., 0.), c=0.):
+    def __init__(
+        self,
+        dim: int = 2,
+        bounds: Tuple[float, float] = (-5, 5),
+        Q: np.ndarray = np.asarray(((1.0, 0.0), (0.0, 1.0))),
+        b: np.ndarray = np.asarray((0.0, 0.0)),
+        c: float = 0.0,
+    ):
         super().__init__(dim, bounds)
         self.Q = np.asarray(Q)
         self.b = np.asarray(b)
         self.c = c
 
-    def __call__(self, x):
+    def __call__(self, x: T) -> T:
         assert len(x) == self.dim
         x = np.asarray(x)
-        return 1/2 * np.dot(
-            np.dot(np.transpose(x), self.Q),
-            np.asarray(x)
-        ) + np.dot(np.transpose(self.b), x) + self.c
-
+        return (
+            1 / 2 * np.dot(np.dot(np.transpose(x), self.Q), np.asarray(x))
+            + np.dot(np.transpose(self.b), x)
+            + self.c
+        )

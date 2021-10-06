@@ -7,14 +7,18 @@ import imageio
 import numpy as np
 
 from matplotlib import animation
-from goa import utils
+from typing import Dict, Tuple, TypeVar, Callable, Iterable, List
+
+from goa import utils, problems
+
+T = TypeVar("T")
 
 
 def differential_evolution(
-    problem,
+    problem: problems.BaseProblem,
     population_size: int = 10,
     problem_dim: int = 2,
-    problem_bounds: tuple = None,
+    problem_bounds: Tuple = None,
     F: float = 0.5,
     CR: float = 0.0,
     convergence_epsilon: float = 1e-4,
@@ -72,7 +76,7 @@ def differential_evolution(
                     iteration_counter, utils.root_mean_squared_error(y, np.mean(y))
                 )
             )
-        X = next(step)
+        X = step.__next__()
         y = np.apply_along_axis(func1d=problem, axis=1, arr=X)
         if not "".__eq__(animation_filepath):
             Xs.append(copy.deepcopy(X))
@@ -80,7 +84,7 @@ def differential_evolution(
 
     if not "".__eq__(animation_filepath):
 
-        def animate(i, problem, Xs):
+        def animate(i: int, problem: problems.BaseProblem, Xs: List[np.ndarray]):
             fig_suptitle = "Differential Evolution algorithm\n(Iteration #{})".format(i)
             if i == 0:
                 utils.plot_population(problem, Xs[i], ax=ax)
@@ -117,13 +121,13 @@ def differential_evolution(
 class DifferentialEvolutionStep:
     def __init__(
         self,
-        problem,
-        X,
+        problem: problems.BaseProblem,
+        X: Iterable[T],
         F: float = 0.5,
         CR: float = 0.2,
     ):
         self.problem = problem
-        self.X = X
+        self.X = np.asarray(X)
         self.F = F
         self.CR = CR
 
@@ -145,12 +149,12 @@ class DifferentialEvolutionStep:
 
 
 def memetic_differential_evolution(
-    problem,
-    local_search_algorithm,
-    local_search_algorithm_args: dict = None,
+    problem: problems.BaseProblem,
+    local_search_algorithm: Callable[[problems.BaseProblem], T],
+    local_search_algorithm_args: Dict = None,
     population_size: int = 10,
     problem_dim: int = 2,
-    problem_bounds: tuple = None,
+    problem_bounds: Tuple = None,
     F: float = 0.5,
     CR: float = 0.0,
     convergence_epsilon: float = 1e-4,
@@ -226,8 +230,10 @@ def memetic_differential_evolution(
 
     if not "".__eq__(animation_filepath):
 
-        def animate(i, problem, Xs):
-            fig_suptitle = "Memetic Differential Evolution algorithm\n(Iteration #{})".format(i)
+        def animate(i: int, problem: problems.BaseProblem, Xs: Iterable[np.ndarray]):
+            fig_suptitle = (
+                "Memetic Differential Evolution algorithm\n(Iteration #{})".format(i)
+            )
             if i == 0:
                 utils.plot_population(problem, Xs[i], ax=ax)
                 fig.suptitle(fig_suptitle, fontsize=14)
@@ -263,15 +269,15 @@ def memetic_differential_evolution(
 class MemeticDifferentialEvolutionStep:
     def __init__(
         self,
-        problem,
-        X,
-        local_search_algorithm,
-        local_search_algorithm_args=None,
+        problem: problems.BaseProblem,
+        X: Iterable[T],
+        local_search_algorithm: Callable[[problems.BaseProblem], T],
+        local_search_algorithm_args: Dict = None,
         F: float = 0.5,
         CR: float = 0.2,
     ):
         self.problem = problem
-        self.X = X
+        self.X = np.asarray(X)
         self.local_search_algorithm = local_search_algorithm
         self.F = F
         self.CR = CR
@@ -299,15 +305,16 @@ class MemeticDifferentialEvolutionStep:
                 self.X[i] = trial
         return self.X
 
+
 def coordinate_method(
-    problem,
-    x0=(1., 1.),
+    problem: problems.BaseProblem,
+    x0: T = (1.0, 1.0),
     alpha0: float = 1.0,
     theta: float = 0.5,
     epsilon: float = 1e-4,
     max_iterations: int = 100,
     animation_filepath: str = "",
-    view_init: tuple = (30, 120),
+    view_init: Tuple = (30, 120),
 ):
     alpha = alpha0
     x = np.asarray(x0)
@@ -327,8 +334,17 @@ def coordinate_method(
             alphas.append(copy.deepcopy(alpha))
 
     if not "".__eq__(animation_filepath):
-        def animate(i, problem, xs, alphas, view_init):
-            fig_suptitle = "Coordinate Method with Simple Descent Step\n(Iteration #{} | Alpha: {:.6f})".format(i, alphas[i])
+
+        def animate(
+            i: int,
+            problem: problems.BaseProblem,
+            xs: List[T],
+            alphas: List[float],
+            view_init: Tuple[float, float],
+        ):
+            fig_suptitle = "Coordinate Method with Simple Descent Step\n(Iteration #{} | Alpha: {:.6f})".format(
+                i, alphas[i]
+            )
             if i == 0:
                 utils.plot_population(problem, xs[i], ax=ax)
                 fig.suptitle(fig_suptitle, fontsize=14)
@@ -360,14 +376,21 @@ def coordinate_method(
 
 
 class CoordinateMethodStep:
-    def __init__(self, problem, x, alpha, theta, directions):
+    def __init__(
+        self,
+        problem: problems.BaseProblem,
+        x: T,
+        alpha: float,
+        theta: float,
+        directions: np.ndarray,
+    ):
         self.problem = problem
         self.x = x
         self.alpha = alpha
         self.theta = theta
         self.directions = directions
 
-    def __next__(self):
+    def __next__(self) -> Tuple[T, float]:
         trials_y = np.asarray(
             [self.problem(self.x + self.alpha * d) for d in self.directions]
         )
@@ -399,7 +422,7 @@ class StoppingRule:
         self.y = None
         self.old_y = None
 
-    def __call__(self, y) -> bool:
+    def __call__(self, y: T) -> bool:
         self.y = y
         if self.first_stopping_rule():
             return True
