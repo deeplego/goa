@@ -1,0 +1,51 @@
+%---------------------------------------------------------------------------------------
+Per cominciare, cos'è goa?
+# check acronimo
+goa, acronimo per Global Optimization Animations,
+è un pacchetto Python che implementa alcuni problemi,
+(ovvero delle funzioni di test per l'ottimizzazione globale)
+e alcune soluzioni
+(ovvero algoritmi di ottimizzazione globale, in questo caso euristiche)
+
+I problemi attualmente implementati sono la funzione di Ackley e la funzione di Rastrigin. Entrambe sono funzioni multivariate con un unico ottimo globale e svariati minimi locali come si può vedere nelle figure.
+Per sperimentare gli algoritmi in un ambiente più 'facile' è stata resa disponibile anche una funzione quadratica.
+
+Per quanto riguarda gli algoritmi di ottimizzazione globale, è stato implementato il Differential Evolution e il Memetic Differential Evolution.
+La versione Memetic necessita di un algoritmo di ottimizzazione locale, a tal fine è stato implementato il Metodo alle Coordinate, un metodo senza derivate che controlla ad ogni iterazione il minimo insieme di direzioni linearmente indipendenti il cui cono sia capace di generare tutto R^n.
+
+%---------------------------------------------------------------------------------------
+Qua abbiamo la definizione della funzione di Ackley e una sua rappresentazione più vivida che è stata prodotta con la libreria goa.
+Di solito la funzione di Ackley viene testata vincolando l'insieme ammissibile ad un hypercubo di cui ogni lato deve essere compreso fra -32 e +32.
+
+%---------------------------------------------------------------------------------------
+Nella slide successiva possiva possiamo vedere la funzione di Rastrigin. Qua il numero 10 nella formula è spesso parametrizzato e viene chiamato per esempio Rastrigin10 oppure Rastrigin20 se il parametro è uguale a 20, ecc.
+
+%---------------------------------------------------------------------------------------
+Senza perderci troppo nei dettagli dei due algoritmi mostrati, l'obiettivo di questa slide
+è quello di far evincere facilmente la similarità fra le due implementazioni.
+L'unica riga di codice per cui gli algoritmi mostrati differiscono è la decima in cui nella versione memetica viene inserita una ricerca locale (che con questo pacchetto viene effettuata con il metodo alle coordinate)
+
+%---------------------------------------------------------------------------------------
+In questa slide saranno mostrate delle animazioni che sono state prodotte con il pacchetto goa.
+A sinistra abbiamo Differential Evolution, ovvero senza ottimizzazione locale applicato al problema di Ackley, mentre sulla destra vedremo la versione memetica sempre sullo stesso problema.
+
+%---------------------------------------------------------------------------------------
+Slide simile alla precedente però il problema qua è quadratico in modo da concentrare l'attenzione sul fatto che senza un'ottimizzazione locale la convergenza è un problema non banale per l'algoritmo non memetico
+
+%---------------------------------------------------------------------------------------
+Il pacchetto può essere scaricato con il classico package manager di Python, pip, con il comando pip install goa e si possono creare delle animazioni personalizzate cambiando gli svariati parametri delle funzioni di ottimizzazione disponibili.
+
+%---------------------------------------------------------------------------------------
+Inoltre è disponibile, seppur limitata, un'interfaccia di comando utilizzabile da terminale.
+Si presta molto bene a creare animazioni standard velocemente senza bisogno di sapere il
+linguaggio di programmazione Python.
+
+%---------------------------------------------------------------------------------------
+In conclusione questo pacchetto può essere utile per chi vuole dare supporto ad una
+spiegazione di uno degli algoritmi sopracitati o semplicemente per vederli da un altro punto di vista.
+Inoltre i problemi intesi come classi della libreria possono essere estesi facilmente e con un po' di sforzo anche diversi algoritmi di ottimizzazione globale possono essere inclusi.
+
+Aspetti critici da sviluppare sarebbero sicuramente la riproducibilità e la scalabilità.
+
+%---------------------------------------------------------------------------------------
+
