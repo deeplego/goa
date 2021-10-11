@@ -20,11 +20,18 @@
 \usepackage{setspace}
 \usepackage{animate}
 \usepackage{multimedia}
-\usepackage{appendixnumberbeamer}
+% \usepackage{appendixnumberbeamer}
 
 \SetAlCapNameFnt{\scriptsize}
 \SetAlCapFnt{\scriptsize}
-
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}}
+}
 %---------------------------------------------------------------------------------------
 %	TITLE PAGE
 %---------------------------------------------------------------------------------------
@@ -59,15 +66,15 @@
 \frametitle{Introduction}
   What is \textbf{goa} (Global Optimization Animations)?
   \begin{itemize}
-    \item goa is a Python package that implements:
+    \item \textbf{goa} is a Python package that implements:
     \begin{enumerate}
       \item some problems (optimization test functions)
-      \begin{itemize}
-        \item Ackley function
-        \item[] \includegraphics[width=0.3\textwidth]{figures/introduction-ackley}
-        \item Rastrigin function
-        \item[] \includegraphics[width=0.3\textwidth]{figures/introduction-rastrigin}
-      \end{itemize}
+     \begin{itemize}
+       \item Ackley function
+       \item[] \includegraphics[width=0.15\textwidth]{figures/introduction-ackley}
+       \item Rastrigin function
+       \item[] \includegraphics[width=0.15\textwidth]{figures/introduction-rastrigin}
+     \end{itemize}
       \item some solutions (optimization algorithms)
       \begin{itemize}
         \item Differential Evolution \cite{de-original}
@@ -75,32 +82,46 @@
         \item Coordinate Method with Simple Descent Direction \cite{textbook}
       \end{itemize}
     \end{enumerate}
+    \item \textbf{goa} aims to visualize the execution of these algorithms on a given problem
   \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------------------------
 \begin{frame}
-  \begin{block}{Definition (Ackley function)}
-    $$f(x_1 \cdots x_n) = -20 exp(-0.2 \sqrt{\frac{1}{n} \sum_{i=1}^n x_i^2}) - exp(\frac{1}{n} \sum_{i=1}^n cos(2\pi x_i)) + 20 + e$$
-    % $$-32 \leq x_i \leq 32$$
-    $$\text{minimum at }f(0, \cdots, 0) = 0$$
-  \end{block}
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/introduction-ackley}
+\frametitle{Ackley and Rastrigin functions}
+Ackley and Rastrigin functions have common similarities:
+  \begin{itemize}
+    \item multimodal ($f:\mathbb{R}^n \rightarrow \mathbb{R}$)
+    \item many local minima
+    \item unique global minimum at $f(x^{\star}) = 0$, with $x^{\star} = (0, \dots, 0)$
+  \end{itemize}
+  \begin{columns}[t]
+    \column{.5\textwidth}
+      \centering
+      \includegraphics[width=1.0\textwidth]{figures/introduction-ackley}
+    \column{.5\textwidth}
+      \centering
+      \includegraphics[width=1.0\textwidth]{figures/introduction-rastrigin}
+  \end{columns}
 \end{frame}
 %---------------------------------------------------------------------------------------
 \begin{frame}
-  \begin{block}{Definition (Rastrigin function)}
-    $$f(x_1 \cdots x_n) = 10n + \sum_{i=1}^n (x_i^2 -10cos(2\pi x_i))$$
-%     $$-5.12 \leq x_i \leq 5.12$$
-    $$\text{minimum at }f(0, \cdots, 0) = 0$$
-  \end{block}
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/introduction-rastrigin}
+\frametitle{Differential Evolution algorithm}
+  Given a population of $p$ vectors $x_i \in \mathbb{R}^n, i \in \{0, \dots, p-1\}$,\\
+  a high level description of one iteration of the algorithm is the following:
+  \begin{itemize}
+    \item for each $x_i$:
+    \begin{enumerate}
+      \item apply to $x_i$ a linear transformation and call it $Trial$
+      \item restore randomly chosen dimensions of $Trial$
+      \item if $f(Trial) < f(x_i)$, then set $x_i := Trial$
+    \end{enumerate}
+  \end{itemize}
+\footnotetext[1]{hola}
 \end{frame}
 %---------------------------------------------------------------------------------------
 \begin{frame}
 \frametitle{Memetic Differential Evolution $vs$ Differential Evolution}
-  The two algorithms differ only by the $10^{th}$ code line.
+  The two algorithms differ only by the $10^{th}$ line of code.
   \medskip
 
   \medskip
@@ -208,13 +229,13 @@
 %---------------------------------------------------------------------------------------
 \begin{frame}
 \frametitle{Command line interface (CLI)}
-  goa provides a CLI that allows to choose:
+  \textbf{goa} provides a CLI that allows to choose:
   \begin{enumerate}
     \item problem
-    \item problem bounds
+    \item problem bounds (optional)
     \item optimization algorithm
-    \item local optimization algorithm required by memetic algorithms
-    \item path for an animation of the execution of the algorithm
+    \item local optimizer (required only for memetic global optimizer)
+    \item animation filepath (optional)
   \end{enumerate}
   \includegraphics[width=1.0\textwidth]{figures/cli-screenshot}
 \end{frame}
@@ -222,10 +243,10 @@
 \begin{frame}
 \frametitle{Conclusion}
 
-  Who would need goa?
+  Who would need \textbf{goa}?
   \begin{itemize}
     \item anyone that would like to support an explanation
-    \item anyone that would like to better understand
+    \item anyone that would like to have another point of view
   \end{itemize}
 
   \begin{itemize}
@@ -249,6 +270,19 @@
 
 \end{frame}
 %---------------------------------------------------------------------------------------
+\begin{frame}[plain,c]
+
+  {\Huge \emph{Thanks for your attention!}}
+
+  \begin{itemize}
+    \item[]
+    \item[]
+  \end{itemize}
+
+  \LARGE Do you have any questions?
+
+\end{frame}
+%---------------------------------------------------------------------------------------
 \begingroup
 \footnotesize
 \begin{frame}
@@ -266,26 +300,35 @@
 \end{frame}
 \endgroup
 %---------------------------------------------------------------------------------------
-\begin{frame}[plain,c]
-
-  {\Huge \emph{Thanks for your attention!}}
-
-  \begin{itemize}
-    \item[]
-    \item[]
-  \end{itemize}
-
-  \LARGE Do you have any questions?
-
+\appendix
+\backupbegin
+\begin{frame}
+  \begin{centering}
+    {\Huge Backup slides}
+  \end{centering}
 \end{frame}
 %---------------------------------------------------------------------------------------
-% \appendix
-% \begin{frame}
-%   \begin{centering}
-%     {\Huge Backup slides}
-%   \end{centering}
-% \end{frame}
-% %---------------------------------------------------------------------------------------
+\begin{frame}
+  \begin{block}{Definition (Ackley function)}
+    $$f(x_1 \cdots x_n) = -20 exp(-0.2 \sqrt{\frac{1}{n} \sum_{i=1}^n x_i^2}) - exp(\frac{1}{n} \sum_{i=1}^n cos(2\pi x_i)) + 20 + e$$
+    $$-32 \leq x_i \leq 32$$
+    $$\text{minimum at } f(x^{\star}) = 0, with x^{\star} = (0, \dots, 0)$$
+  \end{block}
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/introduction-ackley}
+\end{frame}
+%---------------------------------------------------------------------------------------
+\begin{frame}
+  \begin{block}{Definition (Rastrigin function)}
+    $$f(x_1 \cdots x_n) = 10n + \sum_{i=1}^n (x_i^2 -10cos(2\pi x_i))$$
+    $$-5.12 \leq x_i \leq 5.12$$
+    $$\text{minimum at } f(x^{\star}) = 0, with x^{\star} = (0, \dots, 0)$$
+  \end{block}
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/introduction-rastrigin}
+\end{frame}
+%---------------------------------------------------------------------------------------
+\backupend
 
 \end{document}
 
